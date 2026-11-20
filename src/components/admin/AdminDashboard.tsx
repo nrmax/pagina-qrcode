@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
 import { rotuloStatus, statusLaudo } from "@/lib/laudo";
 import type { Equipamento } from "@/data/equipamentos";
+import type { Opcao } from "@/lib/db/equipamentos";
+import EquipamentoForm from "./EquipamentoForm";
 import styles from "./AdminDashboard.module.css";
 
 const CLASSE_PILL = {
@@ -12,13 +15,34 @@ const CLASSE_PILL = {
   vencido: "pill--red",
 } as const;
 
+const ROTULO_STATUS_EQUIP = {
+  ativo: "Ativo",
+  manutencao: "Em manutenção",
+  inativo: "Inativo",
+  desativado: "Desativado",
+} as const;
+
 type Props = {
   equipamentos: Equipamento[];
+  clientes: Opcao[];
+  responsaveis: Opcao[];
 };
 
-export default function AdminDashboard({ equipamentos }: Props) {
+type Formulario =
+  | { modo: "novo" }
+  | { modo: "editar"; equipamento: Equipamento }
+  | null;
+
+export default function AdminDashboard({
+  equipamentos,
+  clientes,
+  responsaveis,
+}: Props) {
+  const router = useRouter();
   const [qr, setQr] = useState<string | null>(null);
   const [origem, setOrigem] = useState("");
+  const [formulario, setFormulario] = useState<Formulario>(null);
+  const [processando, setProcessando] = useState(false);
 
   // Origem calculada só no cliente (evita erro de hidratação)
   useEffect(() => {
@@ -37,7 +61,32 @@ export default function AdminDashboard({ equipamentos }: Props) {
       .catch(() => setQr(null));
   }, []);
 
-  const clientes = new Set(equipamentos.map((e) => e.cliente)).size;
+  async function excluir(e: Equipamento) {
+    if (processando) return;
+    const confirmado = window.confirm(
+      `Excluir "${e.nome}"?\n\nTodas as manutenções, fotos e a senha de acesso serão removidas. Esta ação não pode ser desfeita.`
+    );
+    if (!confirmado) return;
+
+    setProcessando(true);
+    try {
+      const res = await fetch(`/api/admin/equipamentos/${e.id}`, {
+        method: "DELETE",
+      });
+      const dados = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        window.alert(dados.erro ?? "Não foi possível excluir.");
+        return;
+      }
+      router.refresh(); // recarrega os dados do servidor
+    } catch {
+      window.alert("Falha de conexão com o servidor.");
+    } finally {
+      setProcessando(false);
+    }
+  }
+
+  const clientesUnicos = new Set(equipamentos.map((e) => e.cliente)).size;
   const manutencoes = equipamentos.reduce(
     (total, e) => total + e.manutencoes.length,
     0
@@ -48,7 +97,7 @@ export default function AdminDashboard({ equipamentos }: Props) {
 
   const estatisticas = [
     { rotulo: "Equipamentos", valor: equipamentos.length, tom: "neutro" },
-    { rotulo: "Clientes", valor: clientes, tom: "neutro" },
+    { rotulo: "Clientes", valor: clientesUnicos, tom: "neutro" },
     { rotulo: "Laudos em atenção", valor: laudosAtencao, tom: "atencao" },
     { rotulo: "Manutenções", valor: manutencoes, tom: "neutro" },
   ] as const;
@@ -67,8 +116,8 @@ export default function AdminDashboard({ equipamentos }: Props) {
             })}
           </p>
         </div>
-        <span className={styles.avisoDemo}>
-          Demonstração — o CRUD grava no banco nas próximas etapas
+        <span className={styles.seloAmbiente}>
+          Banco Supabase · dados em tempo real
         </span>
       </header>
 
@@ -92,9 +141,8 @@ export default function AdminDashboard({ equipamentos }: Props) {
           <button
             type="button"
             className="btn btn--primary"
-            style={{ height: 40, fontSize: 14, opacity: 0.55 }}
-            disabled
-            title="Disponível após a etapa de banco de dados"
+            style={{ height: 40, fontSize: 14 }}
+            onClick={() => setFormulario({ modo: "novo" })}
           >
             + Novo equipamento
           </button>
@@ -112,17 +160,32 @@ export default function AdminDashboard({ equipamentos }: Props) {
               </tr>
             </thead>
             <tbody>
+              {equipamentos.length === 0 && (
+                <tr>
+                  <td colSpan={5} className={styles.vazio}>
+                    Nenhum equipamento cadastrado. Clique em “+ Novo
+                    equipamento” para criar o primeiro.
+                  </td>
+                </tr>
+              )}
               {equipamentos.map((e) => {
                 const status = statusLaudo(
                   e.laudo.vencimentoEm,
                   e.laudo.alertaDias
                 );
+                const statusEq = e.status ?? "ativo";
                 return (
                   <tr key={e.id}>
                     <td>
                       <strong className={styles.nomeEquip}>{e.nome}</strong>
                       <span className={styles.modeloEquip}>
                         {e.marca} {e.modelo} · {e.anoFabricacao}
+                        {statusEq !== "ativo" && (
+                          <em className={styles.statusEquip}>
+                            {" "}
+                            · {ROTULO_STATUS_EQUIP[statusEq]}
+                          </em>
+                        )}
                       </span>
                     </td>
                     <td className={styles.celulaCliente}>{e.cliente}</td>
@@ -138,16 +201,17 @@ export default function AdminDashboard({ equipamentos }: Props) {
                       <button
                         type="button"
                         className={styles.botaoAcao}
-                        disabled
-                        title="Disponível após a etapa de banco de dados"
+                        onClick={() =>
+                          setFormulario({ modo: "editar", equipamento: e })
+                        }
                       >
                         Editar
                       </button>
                       <button
                         type="button"
                         className={`${styles.botaoAcao} ${styles.excluir}`}
-                        disabled
-                        title="Disponível após a etapa de banco de dados"
+                        onClick={() => excluir(e)}
+                        disabled={processando}
                       >
                         Excluir
                       </button>
@@ -225,6 +289,19 @@ export default function AdminDashboard({ equipamentos }: Props) {
           ))}
         </div>
       </section>
+
+      {/* ---------- Formulário (modal) ---------- */}
+      {formulario && (
+        <EquipamentoForm
+          equipamento={
+            formulario.modo === "editar" ? formulario.equipamento : null
+          }
+          clientes={clientes}
+          responsaveis={responsaveis}
+          aoFechar={() => setFormulario(null)}
+          aoSalvar={() => router.refresh()}
+        />
+      )}
     </div>
   );
 }

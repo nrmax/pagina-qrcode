@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
-import { resolverPorSenha } from "@/data/equipamentos";
 import styles from "./page.module.css";
 
 const TOTAL_DIGITOS = 3;
@@ -74,34 +73,51 @@ export default function PaginaAcesso() {
   }
 
   /**
-   * ETAPA 1 — SIMULAÇÃO.
-   * TODO (etapa 5/7): enviar para POST /api/acesso e validar no servidor,
-   * com hash de senha, rate-limit e bloqueio real de tentativas.
+   * Validação REAL no servidor (POST /api/acesso).
+   * A senha é conferida na tabela protegida por RLS; o cliente
+   * recebe apenas o id quando acerta. Rate-limit também no servidor.
    */
   async function validar(senha: string) {
     if (carregando || bloqueado) return;
     setCarregando(true);
     setErro(false);
 
-    await new Promise((r) => setTimeout(r, 650));
+    try {
+      const res = await fetch("/api/acesso", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha }),
+      });
+      const dados = await res.json().catch(() => ({}));
 
-    const equipamento = resolverPorSenha(senha);
+      if (res.ok && dados.ok && dados.id) {
+        router.push(`/equip/${dados.id}`);
+        return;
+      }
 
-    if (equipamento) {
-      router.push(`/equip/${equipamento.id}`);
-      return;
-    }
+      if (res.status === 429) {
+        const segundos = dados.retryAfter ?? SEGUNDOS_BLOQUEIO;
+        setBloqueioAte(Date.now() + segundos * 1000);
+        setRestante(segundos);
+        setErro(true);
+        setCarregando(false);
+        return;
+      }
 
-    const novasTentativas = tentativas + 1;
-    setTentativas(novasTentativas);
-    setErro(true);
-    setCarregando(false);
-    setDigitos(["", "", ""]);
-    inputsRef.current[0]?.focus();
+      const novasTentativas = tentativas + 1;
+      setTentativas(novasTentativas);
+      setErro(true);
+      setCarregando(false);
+      setDigitos(["", "", ""]);
+      inputsRef.current[0]?.focus();
 
-    if (novasTentativas >= MAX_TENTATIVAS) {
-      setBloqueioAte(Date.now() + SEGUNDOS_BLOQUEIO * 1000);
-      setRestante(SEGUNDOS_BLOQUEIO);
+      if (novasTentativas >= MAX_TENTATIVAS) {
+        setBloqueioAte(Date.now() + SEGUNDOS_BLOQUEIO * 1000);
+        setRestante(SEGUNDOS_BLOQUEIO);
+      }
+    } catch {
+      setErro(true);
+      setCarregando(false);
     }
   }
 
@@ -188,8 +204,7 @@ export default function PaginaAcesso() {
 
         <footer className={styles.rodape}>
           <span className={styles.demo}>
-            Demonstração · senhas: <code>482</code> · <code>137</code> ·{" "}
-            <code>905</code>
+            Acesso individual por senha de 3 dígitos
           </span>
         </footer>
       </section>

@@ -1,11 +1,10 @@
 /**
- * DADOS DE DEMONSTRAÇÃO (Etapa 1 — interface visual).
+ * DADOS DE DEMONSTRAÇÃO — fallback do sistema.
  *
- * Todo conteúdo deste arquivo é fictício e existe apenas para
- * demonstrar a interface. Nas próximas etapas este módulo será
- * substituído por consultas ao banco de dados persistente, e a
- * validação das senhas passará a ocorrer exclusivamente no servidor
- * (hoje é simulação no cliente, marcada como TODO nas chamadas).
+ * Conteúdo fictício usado apenas quando o Supabase não está
+ * acessível (banco vazio ou sem credencial), para que o site
+ * nunca fique fora do ar. Com o banco configurado, os dados
+ * reais vêm de src/lib/db/ e têm precedência.
  */
 
 export type Foto = {
@@ -53,8 +52,10 @@ export type Equipamento = {
   laudo: Laudo;
   camposCustomizados: CampoCustomizado[];
   manutencoes: Manutencao[];
-  /** Somente demonstração — na etapa 5/7 a senha vive apenas no servidor. */
+  /** Senha individual de 3 dígitos (exibida apenas no painel admin). */
   senha: string;
+  /** Status operacional do equipamento no cadastro. */
+  status?: "ativo" | "manutencao" | "inativo" | "desativado";
 };
 
 export const EQUIPAMENTOS: Equipamento[] = [
@@ -252,13 +253,4 @@ export const EQUIPAMENTOS: Equipamento[] = [
 
 export function getEquipamento(id: string): Equipamento | undefined {
   return EQUIPAMENTOS.find((e) => e.id === id);
-}
-
-/**
- * TODO (etapa 7): substituir por POST /api/acesso validando o hash
- * da senha no servidor, com rate-limit e bloqueio por tentativas.
- * Aqui é apenas simulação local para a interface.
- */
-export function resolverPorSenha(senha: string): Equipamento | undefined {
-  return EQUIPAMENTOS.find((e) => e.senha === senha);
 }

@@ -181,7 +181,7 @@ export default function EquipmentView({ equip }: Props) {
           qualidade
         </p>
         <p className={styles.rodapeDemo}>
-          Sistema em demonstração — dados temporários
+          Dados do equipamento sincronizados com o cadastro NRmax
         </p>
       </footer>
     </div>
