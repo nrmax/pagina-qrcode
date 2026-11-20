@@ -18,6 +18,12 @@ type Props = {
 
 export default function AdminDashboard({ equipamentos }: Props) {
   const [qr, setQr] = useState<string | null>(null);
+  const [origem, setOrigem] = useState("");
+
+  // Origem calculada só no cliente (evita erro de hidratação)
+  useEffect(() => {
+    setOrigem(window.location.origin);
+  }, []);
 
   // QR Code único: aponta para a raiz do site (mesmo para todos os equipamentos)
   useEffect(() => {
@@ -195,9 +201,7 @@ export default function AdminDashboard({ equipamentos }: Props) {
                   Baixar QR Code
                 </a>
               )}
-              <span className={styles.qrUrl}>
-                {typeof window !== "undefined" ? window.location.origin : ""}
-              </span>
+              <span className={styles.qrUrl}>{origem}</span>
             </div>
           </div>
         </div>
