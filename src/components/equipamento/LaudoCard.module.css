@@ -1,0 +1,206 @@
+.cartao {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-1);
+  padding: 26px 28px 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Barra lateral de status */
+.cartao::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+}
+
+.valido::before {
+  background: #34c759;
+}
+
+.alerta::before {
+  background: #ffcc00;
+}
+
+.vencido::before {
+  background: #ff3b30;
+}
+
+.topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.titulo {
+  font-size: 21px;
+  margin-top: 12px;
+}
+
+.numero {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---------- Contador ---------- */
+.contador {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  line-height: 1;
+  min-width: 150px;
+}
+
+.contador strong {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.valido .contador strong {
+  color: var(--green);
+}
+
+.alerta .contador strong {
+  color: var(--amber);
+}
+
+.vencido .contador strong {
+  color: var(--red);
+}
+
+.contador span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.contador small {
+  font-size: 12.5px;
+  color: var(--muted-2);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.contadorSkeleton {
+  display: inline-block;
+  height: 52px;
+  min-width: 90px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #eee, #f6f6f8, #eee);
+  background-size: 200% 100%;
+  animation: pulseSoft 1.2s ease-in-out infinite;
+}
+
+/* ---------- Barra de progresso da validade ---------- */
+.barra {
+  height: 8px;
+  background: var(--line-soft);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  margin-top: 22px;
+}
+
+.barraPreenchimento {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  transition: width 0.8s var(--ease-out);
+}
+
+.valido .barraPreenchimento {
+  background: linear-gradient(90deg, #34c759, var(--green));
+}
+
+.alerta .barraPreenchimento {
+  background: linear-gradient(90deg, #ffe14d, #ffb800);
+}
+
+.vencido .barraPreenchimento {
+  background: linear-gradient(90deg, #ff6259, #ff3b30);
+}
+
+/* ---------- Datas ---------- */
+.datas {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.datas > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dataDireita {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.rotuloData {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.datas strong {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* ---------- Nota de configuração ---------- */
+.alertaInfo {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.alertaInfo strong {
+  color: var(--ink-2);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 560px) {
+  .cartao {
+    padding: 22px 20px 18px;
+  }
+
+  .topo {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contador {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .contador strong {
+    font-size: 44px;
+  }
+
+  .datas {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dataDireita {
+    text-align: left;
+    align-items: flex-start;
+  }
+}

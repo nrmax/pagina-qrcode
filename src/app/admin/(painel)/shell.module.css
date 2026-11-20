@@ -1,0 +1,178 @@
+.shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  background: var(--bg);
+}
+
+/* ---------- Barra lateral ---------- */
+.lateral {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--line-soft);
+  padding: 22px 16px 18px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 20px;
+}
+
+.selo {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: var(--brand-soft);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+
+.link:hover {
+  background: var(--line-soft);
+  color: var(--ink);
+}
+
+.desativado {
+  color: var(--muted-2);
+  cursor: default;
+}
+
+.desativado:hover {
+  background: transparent;
+  color: var(--muted-2);
+}
+
+.emBreve {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-2);
+  background: var(--line-soft);
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+}
+
+.divisor {
+  height: 1px;
+  background: var(--line-soft);
+  margin: 14px 8px;
+}
+
+/* ---------- Rodapé da lateral ---------- */
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.sair {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--red);
+  padding: 7px 12px;
+  border-radius: var(--r-pill);
+  transition: background 0.18s var(--ease);
+}
+
+.sair:hover {
+  background: var(--red-soft);
+}
+
+/* ---------- Conteúdo ---------- */
+.conteudo {
+  padding: 40px 44px 72px;
+  max-width: 1120px;
+  width: 100%;
+}
+
+/* ---------- Barra superior (mobile) ---------- */
+.topoMobile {
+  display: none;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    display: none;
+  }
+
+  .topoMobile {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(1.5) blur(18px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .topoMobile .sair {
+    margin-left: auto;
+  }
+
+  .conteudo {
+    padding: 26px 20px 60px;
+  }
+}

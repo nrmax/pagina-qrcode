@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1526"/>
+      <stop offset="1" stop-color="#111d38"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.34" r="0.75">
+      <stop offset="0" stop-color="#0a5cff" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#0a5cff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#ffffff" stroke-opacity="0.045" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+
+  <!-- workbench -->
+  <g stroke="#e8eefc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M140 580 H1060" stroke-width="8"/>
+    <path d="M220 580 V700 M980 580 V700" stroke-opacity="0.6"/>
+
+    <!-- filter cartridge 1 -->
+    <rect x="270" y="360" width="140" height="220" rx="16"/>
+    <path d="M296 392 V548 M322 392 V548 M348 392 V548 M374 392 V548" stroke-opacity="0.55"/>
+    <rect x="300" y="330" width="80" height="34" rx="10" stroke="#6f9bff"/>
+
+    <!-- filter cartridge 2 (taller) -->
+    <rect x="460" y="300" width="120" height="280" rx="16"/>
+    <path d="M486 336 V548 M512 336 V548 M538 336 V548" stroke-opacity="0.55"/>
+    <rect x="488" y="266" width="64" height="38" rx="10" stroke="#6f9bff"/>
+
+    <!-- oil canister -->
+    <rect x="650" y="392" width="130" height="188" rx="16"/>
+    <path d="M690 392 V356 H740 V392" stroke="#6f9bff"/>
+    <path d="M676 448 H754 M676 488 H754" stroke-opacity="0.55"/>
+
+    <!-- gasket ring -->
+    <circle cx="890" cy="474" r="76" stroke="#6f9bff"/>
+    <circle cx="890" cy="474" r="44" stroke-opacity="0.7"/>
+
+    <!-- bolt -->
+    <path d="M976 356 l30 17 v34 l-30 17 l-30 -17 v-34 z" stroke-opacity="0.85"/>
+  </g>
+
+  <text x="48" y="748" fill="#ffffff" fill-opacity="0.55" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="24" letter-spacing="1.5">NRmax · imagem de demonstração</text>
+</svg>

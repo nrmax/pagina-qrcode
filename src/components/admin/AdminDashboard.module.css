@@ -1,0 +1,384 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+  animation: fadeUp 0.55s var(--ease-out) both;
+}
+
+/* ---------- Cabeçalho ---------- */
+.cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.titulo {
+  font-size: clamp(26px, 3.5vw, 34px);
+  letter-spacing: -0.03em;
+}
+
+.subtitulo {
+  margin-top: 5px;
+  font-size: 14.5px;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.avisoDemo {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--amber);
+  background: var(--amber-soft);
+  border: 1px dashed #ffd60a;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+}
+
+/* ---------- Estatísticas ---------- */
+.gradeStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+}
+
+.statAtencao {
+  border-color: rgba(255, 204, 0, 0.55);
+  background: linear-gradient(180deg, #fffdf3, #ffffff);
+}
+
+.statRotulo {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.statValor {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.statAtencao .statValor {
+  color: var(--amber);
+}
+
+/* ---------- Seções ---------- */
+.secao {
+  scroll-margin-top: 24px;
+}
+
+.topoSecao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.topoSecao .tituloSecao {
+  margin-bottom: 0;
+}
+
+.tituloSecao {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 16px;
+}
+
+/* ---------- Tabela ---------- */
+.tabela {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-1);
+  overflow-x: auto;
+}
+
+.tabela table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.tabela th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--line-soft);
+  background: #fafafc;
+}
+
+.tabela td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 14.5px;
+  color: var(--ink-2);
+  vertical-align: middle;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela tbody tr {
+  transition: background 0.15s var(--ease);
+}
+
+.tabela tbody tr:hover {
+  background: #fafafc;
+}
+
+.nomeEquip {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.modeloEquip {
+  display: block;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.celulaCliente {
+  max-width: 220px;
+}
+
+.senha {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  padding: 5px 11px;
+  border-radius: 8px;
+}
+
+.acoes {
+  white-space: nowrap;
+}
+
+.colAcoes {
+  text-align: right;
+}
+
+.acoes {
+  text-align: right;
+}
+
+.botaoAcao {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand);
+  padding: 7px 12px;
+  border-radius: var(--r-pill);
+  transition: background 0.15s var(--ease);
+}
+
+.botaoAcao:hover:not(:disabled) {
+  background: var(--brand-soft);
+}
+
+.botaoAcao:disabled {
+  color: var(--muted-2);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.excluir {
+  color: var(--red);
+}
+
+.excluir:hover:not(:disabled) {
+  background: var(--red-soft);
+}
+
+/* ---------- QR Code ---------- */
+.qrCartao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 34px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-1);
+  padding: 30px 34px;
+}
+
+.qrArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qrImg {
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  background: #fff;
+}
+
+.qrSkeleton {
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f0f0f3, #fafafc, #f0f0f3);
+  background-size: 200% 100%;
+  animation: pulseSoft 1.2s ease-in-out infinite;
+}
+
+.qrTexto h3 {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.qrTexto p {
+  margin-top: 10px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.qrLista {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.qrLista li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.qrLista li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.qrAcoes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.qrUrl {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12.5px;
+  color: var(--muted);
+  background: var(--line-soft);
+  padding: 7px 12px;
+  border-radius: 8px;
+}
+
+/* ---------- Em breve ---------- */
+.emBreve {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.modulo {
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  transition: border-color 0.2s var(--ease), transform 0.25s var(--ease-out);
+}
+
+.modulo:hover {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.moduloSelo {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-2);
+  background: var(--line-soft);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+}
+
+.modulo h4 {
+  margin-top: 12px;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.modulo p {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 760px) {
+  .qrCartao {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 26px 20px;
+    gap: 22px;
+  }
+
+  .qrLista li {
+    text-align: left;
+  }
+
+  .qrAcoes {
+    justify-content: center;
+  }
+
+  .avisoDemo {
+    text-align: center;
+  }
+}

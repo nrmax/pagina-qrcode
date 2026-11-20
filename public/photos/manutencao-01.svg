@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1526"/>
+      <stop offset="1" stop-color="#111d38"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#0a5cff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#0a5cff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#ffffff" stroke-opacity="0.045" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+
+  <!-- compressor line art -->
+  <g stroke="#e8eefc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- piping -->
+    <path d="M430 262 V170 H770 V262" stroke="#6f9bff"/>
+    <path d="M430 170 V140" stroke="#6f9bff"/>
+    <path d="M770 170 V140" stroke="#6f9bff"/>
+    <!-- cabinet -->
+    <rect x="350" y="262" width="500" height="370" rx="26"/>
+    <path d="M600 262 V632"/>
+    <!-- fan grille -->
+    <circle cx="475" cy="430" r="88"/>
+    <circle cx="475" cy="430" r="30" stroke="#6f9bff"/>
+    <path d="M475 342 V372 M475 488 V518 M387 430 H417 M533 430 H563" stroke="#6f9bff"/>
+    <!-- vents -->
+    <path d="M650 350 H810 M650 400 H810 M650 450 H810 M650 500 H810" stroke-opacity="0.75"/>
+    <!-- gauge -->
+    <circle cx="730" cy="310" r="26" stroke="#6f9bff"/>
+    <path d="M730 310 L745 297" stroke="#6f9bff"/>
+    <!-- base -->
+    <path d="M390 632 V664 H810 V632"/>
+    <path d="M430 664 V690 M770 664 V690" stroke-opacity="0.7"/>
+  </g>
+
+  <text x="48" y="748" fill="#ffffff" fill-opacity="0.55" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="24" letter-spacing="1.5">NRmax · imagem de demonstração</text>
+</svg>
