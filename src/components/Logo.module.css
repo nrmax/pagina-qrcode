@@ -1,0 +1,26 @@
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  user-select: none;
+}
+
+.nr {
+  color: var(--ink);
+}
+
+.max {
+  color: var(--brand);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.light .nr {
+  color: #ffffff;
+}
+
+.light .max {
+  color: #7fa9ff;
+}

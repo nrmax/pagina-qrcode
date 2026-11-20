@@ -1,0 +1,147 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(8, 10, 16, 0.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: fadeIn 0.28s var(--ease) both;
+  cursor: zoom-out;
+}
+
+.figura {
+  margin: 0;
+  max-width: min(1080px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  cursor: default;
+  animation: fadeUp 0.35s var(--ease-out) both;
+}
+
+.figura img {
+  width: 100%;
+  max-height: 74vh;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #0c1526;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.legenda {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
+}
+
+.legendaTexto {
+  font-weight: 500;
+}
+
+.contador {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.contador em {
+  font-style: normal;
+  margin-right: 4px;
+}
+
+/* ---------- Botões ---------- */
+.fechar,
+.navegar {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease-out);
+  cursor: pointer;
+}
+
+.fechar:hover,
+.navegar:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.fechar:active,
+.navegar:active {
+  transform: scale(0.92);
+}
+
+.fechar {
+  top: 22px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+}
+
+.navegar {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+}
+
+.navegar:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.anterior {
+  left: 24px;
+}
+
+.proxima {
+  right: 24px;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 640px) {
+  .overlay {
+    padding: 16px;
+  }
+
+  .navegar {
+    top: auto;
+    bottom: 18px;
+    transform: none;
+    width: 46px;
+    height: 46px;
+  }
+
+  .navegar:active {
+    transform: scale(0.92);
+  }
+
+  .anterior {
+    left: calc(50% - 108px);
+  }
+
+  .proxima {
+    right: calc(50% - 108px);
+  }
+
+  .legenda {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding-bottom: 60px;
+  }
+
+  .figura img {
+    max-height: 62vh;
+  }
+}

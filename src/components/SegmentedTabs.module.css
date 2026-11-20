@@ -1,0 +1,52 @@
+.trilho {
+  position: relative;
+  display: flex;
+  background: #e9e9ee;
+  border-radius: var(--r-pill);
+  padding: 4px;
+  gap: 2px;
+  user-select: none;
+}
+
+.pilula {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  background: #ffffff;
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-pill);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.aba {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  height: 38px;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  transition: color 0.25s var(--ease);
+  white-space: nowrap;
+  padding-inline: 18px;
+}
+
+.aba:hover {
+  color: var(--ink-2);
+}
+
+.ativa,
+.ativa:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 480px) {
+  .aba {
+    font-size: 13px;
+    padding-inline: 8px;
+    height: 36px;
+  }
+}

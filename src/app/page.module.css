@@ -1,0 +1,225 @@
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 40px 24px;
+  overflow: hidden;
+}
+
+/* ---------- Fundo com orbes ---------- */
+.orbes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbe1,
+.orbe2,
+.orbe3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: floatOrb 16s var(--ease) infinite;
+}
+
+.orbe1 {
+  width: 480px;
+  height: 480px;
+  top: -140px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(10, 92, 255, 0.28), transparent 65%);
+}
+
+.orbe2 {
+  width: 420px;
+  height: 420px;
+  bottom: -120px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(94, 160, 255, 0.22), transparent 65%);
+  animation-delay: -5s;
+}
+
+.orbe3 {
+  width: 300px;
+  height: 300px;
+  top: 42%;
+  left: 56%;
+  background: radial-gradient(circle, rgba(120, 80, 255, 0.14), transparent 65%);
+  animation-delay: -9s;
+}
+
+/* ---------- Cartão ---------- */
+.cartao {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 44px 40px 32px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(1.4) blur(24px);
+  -webkit-backdrop-filter: saturate(1.4) blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2);
+  animation: fadeUp 0.7s var(--ease-out) both;
+}
+
+.shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.topo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.titulo {
+  font-size: 24px;
+  margin-top: 18px;
+}
+
+.subtitulo {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 300px;
+}
+
+/* ---------- Campos ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.campos {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  border: none;
+}
+
+.campo {
+  width: 76px;
+  height: 88px;
+  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: #f5f5f7;
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease), transform 0.2s var(--ease-out);
+  outline: none;
+  caret-color: var(--brand);
+}
+
+.campo::placeholder {
+  color: #c7c7cc;
+}
+
+.campo:focus {
+  background: #fff;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-soft);
+  transform: translateY(-2px);
+}
+
+.campos:disabled .campo {
+  opacity: 0.6;
+}
+
+/* ---------- Mensagens ---------- */
+.mensagem {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.dica {
+  color: var(--muted-2);
+}
+
+.erro {
+  color: var(--red);
+  font-weight: 500;
+}
+
+.bloqueio {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.carregando {
+  color: var(--muted);
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: center;
+}
+
+.demo {
+  font-size: 12px;
+  color: var(--muted-2);
+  background: var(--line-soft);
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+}
+
+.demo code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: #fff;
+  padding: 1px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+
+/* ---------- Marca de rodapé externa ---------- */
+.marca {
+  position: relative;
+  margin-top: 34px;
+  font-size: 13px;
+  color: var(--muted-2);
+  letter-spacing: 0.01em;
+  text-align: center;
+  animation: fadeIn 1s 0.3s var(--ease) both;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 480px) {
+  .cartao {
+    padding: 36px 24px 28px;
+    border-radius: 24px;
+  }
+
+  .campo {
+    width: 64px;
+    height: 78px;
+    font-size: 30px;
+    border-radius: 16px;
+  }
+
+  .titulo {
+    font-size: 21px;
+  }
+}

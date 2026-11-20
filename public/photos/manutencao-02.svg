@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1526"/>
+      <stop offset="1" stop-color="#111d38"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.62" cy="0.3" r="0.75">
+      <stop offset="0" stop-color="#0a5cff" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#0a5cff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#ffffff" stroke-opacity="0.045" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+
+  <!-- machine behind -->
+  <g stroke="#6f9bff" stroke-opacity="0.45" stroke-width="6" stroke-linejoin="round">
+    <rect x="150" y="330" width="230" height="300" rx="22"/>
+    <path d="M190 380 H340 M190 440 H340 M190 500 H340"/>
+  </g>
+
+  <!-- technician -->
+  <g stroke="#e8eefc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- helmet -->
+    <path d="M508 236 a62 62 0 0 1 124 0" stroke="#6f9bff"/>
+    <path d="M492 240 H648" stroke="#6f9bff"/>
+    <!-- head -->
+    <circle cx="570" cy="266" r="46"/>
+    <!-- torso -->
+    <path d="M505 520 Q500 400 570 372 Q640 400 635 520"/>
+    <!-- arm to tablet -->
+    <path d="M634 420 L742 452"/>
+    <!-- legs -->
+    <path d="M540 520 V648 M600 520 V648"/>
+    <!-- tablet -->
+    <rect x="736" y="408" width="150" height="106" rx="14" stroke="#6f9bff"/>
+    <path d="M762 442 H860 M762 472 H830" stroke="#6f9bff" stroke-opacity="0.8"/>
+    <!-- floor -->
+    <path d="M120 656 H1080" stroke-opacity="0.25"/>
+  </g>
+
+  <text x="48" y="748" fill="#ffffff" fill-opacity="0.55" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="24" letter-spacing="1.5">NRmax · imagem de demonstração</text>
+</svg>

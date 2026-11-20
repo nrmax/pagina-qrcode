@@ -1,0 +1,29 @@
+# Dependências
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+
+# Produção
+/build
+
+# Variáveis de ambiente (nunca commitar segredos)
+.env
+.env.*
+!.env.example
+
+# Banco de dados e arquivos enviados (etapas futuras)
+/db/
+/uploads/
+*.db
+*.db-journal
+
+# Diversos
+.DS_Store
+*.pem
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts

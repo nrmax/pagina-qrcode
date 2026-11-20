@@ -1,0 +1,234 @@
+.raiz {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Barra superior ---------- */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(245, 245, 247, 0.78);
+  backdrop-filter: saturate(1.5) blur(20px);
+  -webkit-backdrop-filter: saturate(1.5) blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.topoInterno {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: 0 24px;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoLink {
+  display: inline-flex;
+  padding: 6px;
+  margin-left: -6px;
+  border-radius: 10px;
+  transition: background 0.2s var(--ease);
+}
+
+.logoLink:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.sair {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand);
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  transition: background 0.2s var(--ease);
+}
+
+.sair:hover {
+  background: var(--brand-soft);
+}
+
+/* ---------- Main ---------- */
+.main {
+  flex: 1;
+  padding-top: 40px;
+  padding-bottom: 72px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 40px;
+  align-items: center;
+  animation: fadeUp 0.65s var(--ease-out) both;
+}
+
+.heroTexto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.nome {
+  font-size: clamp(30px, 4.5vw, 44px);
+  letter-spacing: -0.03em;
+}
+
+.subtituloHero {
+  font-size: 15px;
+  color: var(--muted);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.clienteHero {
+  font-size: 16px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.heroPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.heroFoto {
+  margin: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--line-soft);
+  aspect-ratio: 3 / 2;
+  background: #0c1526;
+}
+
+.heroFoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Abas ---------- */
+.abas {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+  animation: fadeUp 0.65s 0.08s var(--ease-out) both;
+}
+
+.abas > div {
+  min-width: 340px;
+}
+
+/* ---------- Painel ---------- */
+.painel {
+  margin-top: 34px;
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.secao + .secao {
+  margin-top: 44px;
+}
+
+.tituloSecao {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 16px;
+}
+
+/* ---------- Grade de itens (dl) ---------- */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.item {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease);
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+.item dt {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 7px;
+}
+
+.item dd {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 15px !important;
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  border-top: 1px solid var(--line);
+  padding: 28px 24px 36px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.rodapeDemo {
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--muted-2);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .heroFoto {
+    order: -1;
+  }
+
+  .abas > div {
+    min-width: 0;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .main {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sair span {
+    display: none;
+  }
+}
