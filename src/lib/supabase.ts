@@ -50,7 +50,9 @@ export function supabaseAdmin(): SupabaseClient | null {
 }
 
 /** URL pública de um arquivo do Storage (buckets públicos). */
-export function urlStorage(caminho: string): string {
+export function urlStorage(bucket: string, caminho: string): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  return base ? `${base}/storage/v1/object/public/${caminho}` : caminho;
+  return base
+    ? `${base}/storage/v1/object/public/${bucket}/${caminho}`
+    : caminho;
 }

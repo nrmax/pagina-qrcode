@@ -67,7 +67,7 @@ function paraDocumento(row: DocumentoRow): Documento {
     id: row.id,
     nome: row.nome,
     tipo: row.tipo,
-    url: urlStorage(row.storage_path),
+    url: urlStorage("documentos", row.storage_path),
     dataUpload: row.data_upload,
   };
 }
@@ -462,7 +462,7 @@ export async function anexarDocumento(
         id,
         nome: dados.nome,
         tipo,
-        url: urlStorage(caminho),
+        url: urlStorage("documentos", caminho),
         dataUpload: new Date().toISOString().slice(0, 10),
       },
     };
