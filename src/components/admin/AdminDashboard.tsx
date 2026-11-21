@@ -30,7 +30,7 @@ type Props = {
 
 type Formulario =
   | { modo: "novo" }
-  | { modo: "editar"; equipamento: Equipamento }
+  | { modo: "editar"; id: string }
   | null;
 
 export default function AdminDashboard({
@@ -43,6 +43,12 @@ export default function AdminDashboard({
   const [origem, setOrigem] = useState("");
   const [formulario, setFormulario] = useState<Formulario>(null);
   const [processando, setProcessando] = useState(false);
+
+  // Deriva o equipamento atual da lista (sempre fresco após refresh)
+  const equipamentoEditando =
+    formulario?.modo === "editar"
+      ? equipamentos.find((e) => e.id === formulario.id) ?? null
+      : null;
 
   // Origem calculada só no cliente (evita erro de hidratação)
   useEffect(() => {
@@ -202,7 +208,7 @@ export default function AdminDashboard({
                         type="button"
                         className={styles.botaoAcao}
                         onClick={() =>
-                          setFormulario({ modo: "editar", equipamento: e })
+                          setFormulario({ modo: "editar", id: e.id })
                         }
                       >
                         Editar
@@ -291,17 +297,17 @@ export default function AdminDashboard({
       </section>
 
       {/* ---------- Formulário (modal) ---------- */}
-      {formulario && (
-        <EquipamentoForm
-          equipamento={
-            formulario.modo === "editar" ? formulario.equipamento : null
-          }
-          clientes={clientes}
-          responsaveis={responsaveis}
-          aoFechar={() => setFormulario(null)}
-          aoSalvar={() => router.refresh()}
-        />
-      )}
+      {formulario &&
+        (formulario.modo === "novo" || equipamentoEditando) && (
+          <EquipamentoForm
+            equipamento={equipamentoEditando}
+            clientes={clientes}
+            responsaveis={responsaveis}
+            aoFechar={() => setFormulario(null)}
+            aoSalvar={() => router.refresh()}
+            aoAtualizar={() => router.refresh()}
+          />
+        )}
     </div>
   );
 }

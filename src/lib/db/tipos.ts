@@ -84,6 +84,17 @@ export type CampoTecnicoRow = {
   ordem: number;
 };
 
+export type DocumentoRow = {
+  id: string;
+  equipamento_id: string | null;
+  cliente_id: string | null;
+  manutencao_id: string | null;
+  nome: string;
+  tipo: string;
+  storage_path: string;
+  data_upload: string;
+};
+
 /** Shape retornado pelo select aninhado do Supabase. */
 export type EquipamentoComRelacoes = EquipamentoRow & {
   clientes: Pick<ClienteRow, "nome" | "endereco"> | null;
@@ -91,4 +102,5 @@ export type EquipamentoComRelacoes = EquipamentoRow & {
   equipamentos_senhas: { senha: string } | null;
   manutencoes: (ManutencaoRow & { fotos: FotoRow[] })[];
   campos_tecnicos: CampoTecnicoRow[];
+  documentos: DocumentoRow[];
 };

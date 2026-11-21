@@ -1,12 +1,19 @@
-import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { supabase, supabaseAdmin, urlStorage } from "@/lib/supabase";
 import type {
   EquipamentoComRelacoes,
   EquipamentoRow,
   ManutencaoRow,
   FotoRow,
   CampoTecnicoRow,
+  DocumentoRow,
 } from "@/lib/db/tipos";
-import type { Equipamento, Manutencao, Foto, CampoCustomizado } from "@/data/equipamentos";
+import type {
+  Equipamento,
+  Manutencao,
+  Foto,
+  CampoCustomizado,
+  Documento,
+} from "@/data/equipamentos";
 
 /**
  * Camada de acesso a dados (repositório).
@@ -24,7 +31,8 @@ const SELECT_RELACIONAMENTOS = `
   responsaveis ( nome, cargo ),
   equipamentos_senhas ( senha ),
   manutencoes ( *, fotos ( * ) ),
-  campos_tecnicos ( * )
+  campos_tecnicos ( * ),
+  documentos ( * )
 `;
 
 function paraFoto(row: FotoRow): Foto {
@@ -51,6 +59,16 @@ function paraCampoCustomizado(row: CampoTecnicoRow): CampoCustomizado {
   return {
     rotulo: row.chave,
     valor: row.unidade ? `${row.valor} ${row.unidade}` : row.valor,
+  };
+}
+
+function paraDocumento(row: DocumentoRow): Documento {
+  return {
+    id: row.id,
+    nome: row.nome,
+    tipo: row.tipo,
+    url: urlStorage(row.storage_path),
+    dataUpload: row.data_upload,
   };
 }
 
@@ -91,6 +109,10 @@ function paraDominio(row: EquipamentoComRelacoes): Equipamento {
       .map(paraManutencao),
     senha: row.equipamentos_senhas?.senha ?? "",
     status: row.status,
+    documentos: (row.documentos ?? [])
+      .slice()
+      .sort((a, b) => b.data_upload.localeCompare(a.data_upload))
+      .map(paraDocumento),
   };
 }
 
@@ -383,4 +405,101 @@ export async function listarResponsaveis(): Promise<Opcao[]> {
     return [];
   }
   return (data ?? []) as Opcao[];
+}
+
+// ============================================================
+// DOCUMENTOS PDF (Supabase Storage — bucket "documentos")
+// ============================================================
+
+/**
+ * Envia um PDF para o Storage e registra na tabela `documentos`.
+ * Somente servidor (service_role). O caminho usa UUID (sem o nome
+ * original) para evitar caracteres inválidos e colisões; o nome
+ * original fica no banco para exibição.
+ */
+export async function anexarDocumento(
+  equipamentoId: string,
+  dados: { nome: string; bytes: ArrayBuffer; tipo?: string }
+): Promise<{ ok: true; documento: Documento } | { ok: false; erro: string }> {
+  const sb = supabaseAdmin();
+  if (!sb)
+    return {
+      ok: false,
+      erro: "Servidor sem credencial de escrita (SUPABASE_SERVICE_ROLE_KEY).",
+    };
+
+  const id = crypto.randomUUID();
+  const caminho = `${equipamentoId}/${id}.pdf`;
+
+  try {
+    const { error: erroUpload } = await sb.storage
+      .from("documentos")
+      .upload(caminho, dados.bytes, {
+        contentType: "application/pdf",
+        upsert: false,
+      });
+    if (erroUpload)
+      return { ok: false, erro: `Falha no upload: ${erroUpload.message}` };
+
+    const tipo = dados.tipo ?? "outro";
+    const { error: erroInsert } = await sb.from("documentos").insert({
+      id,
+      equipamento_id: equipamentoId,
+      nome: dados.nome,
+      tipo,
+      storage_path: caminho,
+    });
+
+    if (erroInsert) {
+      // Desfaz o arquivo órfão no Storage
+      await sb.storage.from("documentos").remove([caminho]);
+      return { ok: false, erro: `Falha ao registrar: ${erroInsert.message}` };
+    }
+
+    return {
+      ok: true,
+      documento: {
+        id,
+        nome: dados.nome,
+        tipo,
+        url: urlStorage(caminho),
+        dataUpload: new Date().toISOString().slice(0, 10),
+      },
+    };
+  } catch (erro) {
+    return { ok: false, erro: `Falha inesperada: ${String(erro)}` };
+  }
+}
+
+/** Remove o PDF do Storage e o registro do banco. */
+export async function removerDocumento(id: string): Promise<Resultado> {
+  const sb = supabaseAdmin();
+  if (!sb)
+    return {
+      ok: false,
+      erro: "Servidor sem credencial de escrita (SUPABASE_SERVICE_ROLE_KEY).",
+    };
+
+  try {
+    const { data, error } = await sb
+      .from("documentos")
+      .select("storage_path")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) return { ok: false, erro: `Falha ao localizar: ${error.message}` };
+    if (!data) return { ok: false, erro: "Documento não encontrado." };
+
+    const { error: erroDelete } = await sb
+      .from("documentos")
+      .delete()
+      .eq("id", id);
+    if (erroDelete)
+      return { ok: false, erro: `Falha ao excluir: ${erroDelete.message}` };
+
+    await sb.storage.from("documentos").remove([data.storage_path]);
+    return { ok: true };
+  } catch (erro) {
+    return { ok: false, erro: `Falha inesperada: ${String(erro)}` };
+  }
 }

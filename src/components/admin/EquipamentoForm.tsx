@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Equipamento } from "@/data/equipamentos";
+import type { Documento, Equipamento } from "@/data/equipamentos";
 import type { Opcao } from "@/lib/db/equipamentos";
 import styles from "./EquipamentoForm.module.css";
 
@@ -12,6 +12,8 @@ type Props = {
   responsaveis: Opcao[];
   aoFechar: () => void;
   aoSalvar: () => void;
+  /** Recarrega os dados do servidor sem fechar (após anexar/remover PDF) */
+  aoAtualizar: () => void;
 };
 
 type Campos = {
@@ -85,15 +87,96 @@ export default function EquipamentoForm({
   responsaveis,
   aoFechar,
   aoSalvar,
+  aoAtualizar,
 }: Props) {
   const editando = Boolean(equipamento);
   const [f, setF] = useState<Campos>(() => deEquipamento(equipamento));
   const [erro, setErro] = useState("");
   const [salvando, setSalvando] = useState(false);
+  const [docs, setDocs] = useState<Documento[]>(equipamento?.documentos ?? []);
+  const [enviandoDoc, setEnviandoDoc] = useState(false);
+  const [erroDoc, setErroDoc] = useState("");
 
   function alterar(campo: keyof Campos, valor: string) {
     setF((ant) => ({ ...ant, [campo]: valor }));
     if (erro) setErro("");
+  }
+
+  /** Upload imediato do PDF (requer equipamento já criado). */
+  async function enviarPdf(arquivo: File) {
+    if (!equipamento || enviandoDoc) return;
+
+    const ehPdf =
+      arquivo.type === "application/pdf" ||
+      arquivo.name.toLowerCase().endsWith(".pdf");
+    if (!ehPdf) {
+      setErroDoc("Apenas arquivos PDF são aceitos.");
+      return;
+    }
+    if (arquivo.size > 10 * 1024 * 1024) {
+      setErroDoc("O PDF deve ter no máximo 10 MB.");
+      return;
+    }
+
+    setEnviandoDoc(true);
+    setErroDoc("");
+
+    try {
+      const corpo = new FormData();
+      corpo.append("arquivo", arquivo);
+      corpo.append("nome", arquivo.name);
+
+      const res = await fetch(
+        `/api/admin/equipamentos/${equipamento.id}/documentos`,
+        { method: "POST", body: corpo }
+      );
+      const dados = await res.json().catch(() => ({}));
+
+      if (!res.ok || !dados.documento) {
+        setErroDoc(dados.erro ?? "Não foi possível enviar o PDF.");
+        return;
+      }
+
+      setDocs((ant) => [dados.documento as Documento, ...ant]);
+      aoAtualizar();
+    } catch {
+      setErroDoc("Falha de conexão com o servidor.");
+    } finally {
+      setEnviandoDoc(false);
+    }
+  }
+
+  async function removerDoc(doc: Documento) {
+    if (enviandoDoc) return;
+    const confirmado = window.confirm(
+      `Remover o PDF "${doc.nome}"?\n\nO arquivo será apagado do armazenamento.`
+    );
+    if (!confirmado) return;
+
+    setEnviandoDoc(true);
+    setErroDoc("");
+    try {
+      const res = await fetch(`/api/admin/documentos/${doc.id}`, {
+        method: "DELETE",
+      });
+      const dados = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setErroDoc(dados.erro ?? "Não foi possível remover.");
+        return;
+      }
+      setDocs((ant) => ant.filter((d) => d.id !== doc.id));
+      aoAtualizar();
+    } catch {
+      setErroDoc("Falha de conexão com o servidor.");
+    } finally {
+      setEnviandoDoc(false);
+    }
+  }
+
+  function dataBR(iso: string): string {
+    if (!iso) return "";
+    const [a, m, d] = iso.split("-");
+    return `${d}/${m}/${a}`;
   }
 
   async function enviar(e: React.FormEvent) {
@@ -361,6 +444,83 @@ export default function EquipamentoForm({
                 />
               </label>
             </div>
+          </fieldset>
+
+          {/* ---------- Documentos ---------- */}
+          <fieldset className={styles.grupo}>
+            <legend>Documentos (PDF)</legend>
+
+            {!editando ? (
+              <p className={styles.avisoDoc}>
+                Salve o equipamento primeiro para anexar documentos PDF.
+              </p>
+            ) : (
+              <>
+                <div className={styles.linhaDoc}>
+                  <label
+                    className={`btn btn--ghost ${styles.botaoArquivo} ${
+                      enviandoDoc ? styles.botaoArquivoOcupado : ""
+                    }`}
+                  >
+                    {enviandoDoc ? "Enviando…" : "Anexar PDF"}
+                    <input
+                      type="file"
+                      accept="application/pdf,.pdf"
+                      hidden
+                      disabled={enviandoDoc}
+                      onChange={(e) => {
+                        const arquivo = e.target.files?.[0];
+                        if (arquivo) enviarPdf(arquivo);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  <span className={styles.dicaDoc}>
+                    Até 10 MB · o arquivo fica no Storage do Supabase
+                  </span>
+                </div>
+
+                {erroDoc && (
+                  <p className={styles.erroDoc} role="alert">
+                    {erroDoc}
+                  </p>
+                )}
+
+                {docs.length === 0 ? (
+                  <p className={styles.semDocs}>Nenhum PDF anexado ainda.</p>
+                ) : (
+                  <ul className={styles.listaDocs}>
+                    {docs.map((doc) => (
+                      <li key={doc.id}>
+                        <span className={styles.docSelo}>PDF</span>
+                        <span className={styles.docNome} title={doc.nome}>
+                          {doc.nome}
+                        </span>
+                        <span className={styles.docData}>
+                          {dataBR(doc.dataUpload)}
+                        </span>
+                        <a
+                          className={styles.docAcao}
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Abrir
+                        </a>
+                        <button
+                          type="button"
+                          className={`${styles.docAcao} ${styles.docRemover}`}
+                          onClick={() => removerDoc(doc)}
+                          disabled={enviandoDoc}
+                        >
+                          Remover
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
           </fieldset>
 
           {/* ---------- Acesso ---------- */}

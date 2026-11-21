@@ -35,6 +35,15 @@ export type Laudo = {
   alertaDias: number; // prazo de alerta configurado pelo administrador
 };
 
+/** Documento PDF anexado ao equipamento (Supabase Storage). */
+export type Documento = {
+  id: string;
+  nome: string;
+  tipo: string;
+  url: string;
+  dataUpload: string; // AAAA-MM-DD
+};
+
 export type Equipamento = {
   id: string;
   nome: string;
@@ -52,6 +61,7 @@ export type Equipamento = {
   laudo: Laudo;
   camposCustomizados: CampoCustomizado[];
   manutencoes: Manutencao[];
+  documentos?: Documento[];
   /** Senha individual de 3 dígitos (exibida apenas no painel admin). */
   senha: string;
   /** Status operacional do equipamento no cadastro. */
